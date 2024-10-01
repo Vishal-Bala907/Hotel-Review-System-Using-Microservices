@@ -1,0 +1,27 @@
+package com.hotel.service.servives;
+
+import java.util.List;
+
+import com.hotel.service.modals.Hotel;
+
+public class HotelServiceImple implements HotelService {
+
+	@Override
+	public Hotel createHotel(Hotel hotel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Hotel> getAllHotels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Hotel getHotelById(String hotelId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

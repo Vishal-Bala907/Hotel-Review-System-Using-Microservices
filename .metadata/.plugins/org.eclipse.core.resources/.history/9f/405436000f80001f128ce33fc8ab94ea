@@ -1,0 +1,52 @@
+package com.review.service.controllers;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.review.service.modals.Rating;
+import com.review.service.services.RatingServiceImple;
+
+@RestController
+@RequestMapping("/rating")
+public class RatingController {
+
+	@Autowired
+	private RatingServiceImple ratingService;
+
+	// create
+	@PostMapping("/create")
+	public ResponseEntity<Rating> createRating(@RequestBody Rating rating) {
+		Rating rt = ratingService.createRating(rating);
+		return new ResponseEntity<Rating>(rt, HttpStatus.CREATED);
+	}
+
+	// get all
+	@GetMapping("/get-all")
+	public ResponseEntity<List<Rating>> getAll() {
+		return new ResponseEntity<List<Rating>>(ratingService.getAllRatings(), HttpStatus.CREATED);
+	}
+
+	// get all
+	@GetMapping("/get-user-rating/{userId}")
+	public ResponseEntity<List<Rating>> getRatingsByUserId(@PathVariable int userID) {
+		System.out.println(userID);
+		return new ResponseEntity<List<Rating>>(ratingService.getAllRatingByUserId(userID), HttpStatus.CREATED);
+	}
+
+	// get all
+	@GetMapping("/get-hotel-rating/{hotelId}")
+	public ResponseEntity<List<Rating>> getRatingsByHotelId(@PathVariable String hotelId) {
+		return new ResponseEntity<List<Rating>>(ratingService.getAllRatingsByHotelId(hotelId),
+				HttpStatus.CREATED);
+	}
+
+}

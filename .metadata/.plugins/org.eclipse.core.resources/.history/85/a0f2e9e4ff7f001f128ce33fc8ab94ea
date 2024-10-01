@@ -1,0 +1,5 @@
+package com.hotel.service.servives;
+
+public interface HotelService {
+
+}

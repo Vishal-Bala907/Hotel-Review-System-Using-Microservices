@@ -1,0 +1,5 @@
+package com.hotel.service.modals;
+
+public class Hotel {
+
+}

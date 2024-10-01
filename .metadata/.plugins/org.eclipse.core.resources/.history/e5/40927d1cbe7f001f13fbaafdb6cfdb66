@@ -1,0 +1,5 @@
+package com.user.service.modals;
+
+public class ApiResponse {
+
+}

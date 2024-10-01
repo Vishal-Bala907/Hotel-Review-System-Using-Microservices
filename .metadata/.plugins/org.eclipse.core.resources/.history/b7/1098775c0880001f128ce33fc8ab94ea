@@ -1,0 +1,33 @@
+package com.review.service.services;
+
+import java.util.List;
+
+import com.review.service.modals.Rating;
+
+public class RatingServiceImple implements RatingService {
+
+	@Override
+	public Rating createRating(Rating rating) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Rating> getAllRatings() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Rating> getAllRatingOfUser(int userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Rating> getAllRatingsOfHotel(String hotelId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}
