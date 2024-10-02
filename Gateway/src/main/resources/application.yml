@@ -1,0 +1,24 @@
+#spring.application.name=Gateway
+
+spring:
+  application:
+    name: Gateway
+  cloud:
+    gateway:
+      mvc:
+        routes:
+        - id: USERSERVICE
+          uri: lb://USERSERVICE
+          predicates:
+          -  Path=/user/**
+          
+        - id: HOTELSERVICE
+          uri: lb://HOTELSERVICE
+          predicates:
+          -  Path=/hotel/**
+          
+        - id: REVIEWSERVICE
+          uri: lb://REVIEWSERVICE
+          predicates:
+          -  Path=/rating/**
+          
