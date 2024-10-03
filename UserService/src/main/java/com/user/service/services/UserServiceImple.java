@@ -85,6 +85,17 @@ public class UserServiceImple implements UserService {
 	@Override
 	public User getUser(int id) {
 		Optional<User> byId = repository.findById(id);
+//		System.out.println("ello .... ");
+		List<Rating> body = ratingService.getRatingsByUserId(byId.get().getUid()).getBody();
+//		List<Hotel> hotels = new ArrayList<>();
+		
+		for(Rating rt : body) {
+			Hotel body2 = hotelService.getHotel(rt.getHotelId()).getBody();
+			rt.setHotel(body2);
+		}
+		
+		byId.get().setRatings(body);
+		
 		return byId.orElseThrow(() -> new ResourcenotFoundException("cannot find user"));
 	}
 

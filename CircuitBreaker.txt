@@ -1,0 +1,73 @@
+Circuit breaker is a utility that lets you specify whether the particular service is running or closed
+If service is open -> then it calls a callback function that lets you know that something in wrong with the service
+
+===================================================================================================================
+
+We are Implementing Circuit Breaker in the UserService microservice
+
+===============   STEPS ===================
+
+1.st Add Dependencies
+	- spring-boot-starter-actuater
+	- spring-boot-starter-aop
+	- resilience4j spring boot 2
+	
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-aop</artifactId>
+		</dependency>
+		<!--
+		https://mvnrepository.com/artifact/io.github.resilience4j/resilience4j-spring-boot2 -->
+		<dependency>
+			<groupId>io.github.resilience4j</groupId>
+			<artifactId>resilience4j-spring-boot2</artifactId>
+		</dependency>
+
+2. Determine the dependent controllers and method
+
+3. add annotation @CuircuitBeaker(name="__name__", fallBackMethod="methodName&path") Over the method which is dependent on other services
+	- make sure the fallback method's return type is same as the method over which @CuircuitBeaker addded
+	- fallBackMethod name should be same in both places (annotation and declaration)
+	ex: 
+	@GetMapping("/get/{id}")
+	@CircuitBreaker(name = "ratingHotelBreaker")
+	public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+		User user = userServiceImple.getUser(id);
+		return new ResponseEntity<User>(user, HttpStatus.CREATED);
+	} 
+
+	--------------------------------------------------------------------------------------
+
+	public ResponseEntity<User> ratingHotelBreaker(int id,Exception exception) {
+		LOGGER.info("Fall back is executed ....\n Service is down "+exception.getMessage());
+		
+		return new ResponseEntity<User>(new User(), HttpStatus.CREATED);
+	}
+
+	--------------------------------------------------------------------------------------
+
+
+4. Configuration for the resilience4J
+	1. in application.properties/yml file
+	
+#Actuater configs
+
+	management.health.circuitbreakers.enabled=true
+	management.endpoints.web.exposure.include= =health
+	management.endpoint.health.show-details=always
+
+# resilience configs
+
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.register-health-indicator=true
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.event-consumer-buffer-size=10
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.failure-rate-threshold=50
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.minimum-number-of-calls=5
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.automatic-transition-from-open-to-half-open-enabled=true
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.wait-duration-in-open-state=6s
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.permitted-number-of-calls-in-half-open-state=3
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.sliding-window-size=10
+	resilience4j.circuitbreaker.instances.ratingHotelBreaker.sliding-window-type=count-based

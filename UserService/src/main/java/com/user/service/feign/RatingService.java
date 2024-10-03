@@ -14,7 +14,7 @@ import com.user.service.modals.Rating;
 
 
 @Component
-@FeignClient("REVIEWSERVICE")
+@FeignClient(name="REVIEWSERVICE")
 public interface RatingService {
 	// create
 		@PostMapping("/rating/create")

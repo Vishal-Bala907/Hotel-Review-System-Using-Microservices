@@ -1,0 +1,29 @@
+Dependencies are same :
+
+	@GetMapping("/get/{id}")
+//	@CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
+	@Retry(name = "ratingHotelRetry", fallbackMethod = "ratingHotelFallback")
+	public ResponseEntity<User> getUser(@PathVariable("id") int id) {
+		User user = userServiceImple.getUser(id);
+		return new ResponseEntity<User>(user, HttpStatus.CREATED);
+	}
+
+	public ResponseEntity<User> ratingHotelFallback(int id, Exception exception) {
+		LOGGER.info("Fall back is executed ....\n Service is down " + exception.getMessage());
+
+		return new ResponseEntity<User>(new User(), HttpStatus.BAD_REQUEST);
+	}
+
+	@GetMapping("/get-all")
+	public ResponseEntity<List<User>> getAllUsers() {
+		List<User> users = userServiceImple.getAllUsers();
+		return new ResponseEntity<List<User>>(users, HttpStatus.CREATED);
+	}
+
+
+========================================================================
+
+resilience4j.retry.instances.ratingHotelBreaker.max-attempts=3
+resilience4j.retry.instances.ratingHotelBreaker.wait-duration=5
+
+==============================================   RATE LIMITER  =====================================
